@@ -93,6 +93,11 @@ Route::get('/rss-automation/pending/{id}', 'RssAutomationController@pendingGroup
 Route::get('/rss-automation/active/{id}', 'RssAutomationController@activeGroup')->name('rss-automation-active');
 Route::get('/rss-automation/completed/{id}', 'RssAutomationController@completedGroup')->name('rss-automation-completed');
 
+///
+///newly created route
+Route::get('/buffer_posting/', 'BufferController@getall')->name('buffer_all');
+///
+
 Route::get('/analytics/', 'PagesController@analytics')->name('analytics');
 Route::get('/calendar/', 'PagesController@calendar')->name('calendar');
 Route::get('/support/', 'PagesController@support')->name('support');
