@@ -22,6 +22,7 @@
 			'APP_URL' => env('APP_URL'),
 		]) !!};
     </script>
+
     <script type="text/javascript">
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
@@ -37,6 +38,7 @@
             f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-TLNT7S');
     </script>
+
     <script type="text/javascript">
         (function (o) {
             var b = "https://api.autopilothq.com/anywhere/",
@@ -99,7 +101,6 @@ if(\Auth::check()){
 
 $user = \Bulkly\User::find(\Auth::id());
 $user_meta = unserialize($user->user_meta);
-
 if(isset($user_meta['temp_subs'])) {
 if($user_meta['temp_subs'] === true){
 ?>
@@ -322,10 +323,6 @@ if($user_meta['temp_user'] === true){
 
                     <li @if ($route=='history') class="active" @endif><a href="{{ url('/history') }}"> <i
                                     class="fa fa-home"></i> History</a></li>
-                    <!-- newly created menu-->                
-                    <li @if ($route=='history') class="active" @endif><a href="{{ url('/buffer_posting') }}"> <i
-                                    class="fa fa-circle"></i> Buffer Posting</a></li>
-                    <!-- newly created menu-->                 
 
                 @endif
             </ul>
@@ -344,7 +341,7 @@ if($user_meta['temp_user'] === true){
         var result = hash.split('=');
         var result = result[1].split('&');
         if (result[0]) {
-            console.log(result[0]);
+            //console.log(result[0]);
             var data = new FormData();
             data.append('_token', $('meta[name="csrf-token"]').attr('content'));
             data.append('rebrandly_key', result[0]);
@@ -372,7 +369,7 @@ if($user_meta['temp_user'] === true){
 
     $('.Disconnected_Rebrandly').click(function () {
 
-        console.log('ok');
+       // console.log('ok');
         var data = new FormData();
         data.append('_token', $('meta[name="csrf-token"]').attr('content'));
         data.append('rebrandly_key', '');
@@ -418,7 +415,7 @@ if($user_meta['temp_user'] === true){
     rebrandUp.submit(function () {
         ajaxStart();
         var data = objectifyForm(rebrandUp.serializeArray());
-        console.log(data);
+        //console.log(data);
         $.ajax({
             type: "POST",
             url: '/rebrandly-domain',
@@ -464,7 +461,7 @@ if($user_meta['temp_user'] === true){
             contentType: false,
             processData: false,
             success: function success(data) {
-                console.log(data);
+               // console.log(data);
                 window.location.reload();
                 ajaxEnd();
 
@@ -582,12 +579,12 @@ if($user_meta['temp_subs'] === true){
     function stripeResponseHandler(status, response) {
         var $form = $('#payment-form');
         if (response.error) {
-            console.log(response.error.message);
+           // console.log(response.error.message);
             $form.find('.payment-errors').text(response.error.message).show();
             $form.find('.submit').prop('disabled', false);
         } else {
             var token = response.id;
-            console.log(token);
+           // console.log(token);
             $form.append($('<input type="hidden" name="stripeToken">').val(token));
 
             $form.find('.payment-errors').text('Your payment was successful. We\'re redirecting you back to your Bulkly account...').show().removeClass('alert-danger').addClass('alert-success');
@@ -607,7 +604,7 @@ if($user_meta['temp_subs'] === true){
 <script>
     $(function () {
         $('input[name="slot_amount"]').change(function () {
-            console.log($(this).val());
+           // console.log($(this).val());
             $('.slot_amount').text($(this).val());
         });
         var slot_amount = document.querySelector("input[name='slot_amount']");

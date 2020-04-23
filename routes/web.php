@@ -95,9 +95,9 @@ Route::get('/rss-automation/completed/{id}', 'RssAutomationController@completedG
 
 ///
 ///newly created route
-Route::get('/buffer_posting/', 'BufferController@getall')->name('buffer_all');
+Route::get('/history', 'BufferController@index')->name('history');
+Route::get('/history/url/{any}', 'BufferController@getBySelect')->name('history_search');
 ///
-
 Route::get('/analytics/', 'PagesController@analytics')->name('analytics');
 Route::get('/calendar/', 'PagesController@calendar')->name('calendar');
 Route::get('/support/', 'PagesController@support')->name('support');

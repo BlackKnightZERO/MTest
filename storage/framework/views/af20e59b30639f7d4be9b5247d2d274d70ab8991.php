@@ -1,5 +1,4 @@
-@extends('layouts.app')
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container-fluid app-body">
     <h3>Buffer Postings 
     </h3>
@@ -31,9 +30,9 @@
                         <div class="col-md-3">
                             <select id="select_groups">
                               <option value="volvo">All Groups</option>
-                              @foreach($groups as $group)
-                              <option value="{{ $group->id }}">{{ $group->name }}</option>
-                              @endforeach
+                              <?php $__currentLoopData = $groups; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                              <option value="<?php echo e($group->id); ?>"><?php echo e($group->name); ?></option>
+                              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                     </div>
@@ -51,29 +50,30 @@
                             </tr> 
                         </thead>
                         <tbody>
-                            @foreach($bufferPosts as $key => $bp)
+                            <?php $__currentLoopData = $bufferPosts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $bp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                            <tr>
-                            <td>{{ $groupInfo[$key]->name }}</td>
-                            <td>{{ $groupInfo[$key]->type }}</td>
+                            <td><?php echo e($groupInfo[$key]->name); ?></td>
+                            <td><?php echo e($groupInfo[$key]->type); ?></td>
                             <td>
                                 <div class="media">
                                     <div class="media-right">
                                         <a href="">
-                                            <span class="fa fa-{{$accountInfo[$key]->type}}"></span>
+                                            <span class="fa fa-<?php echo e($accountInfo[$key]->type); ?>"></span>
 
-                                            <img width="50" class="media-object img-circle" src="{{$accountInfo[$key]->avatar}}" alt="">
+                                            <img width="50" class="media-object img-circle" src="<?php echo e($accountInfo[$key]->avatar); ?>" alt="">
                                         </a>
                                     </div>
                                 </div>
                             </td> 
-                            <td>{{ $bp->post_text }}</td>
-                            <td>{{ $bp->sent_at }}</td>
+                            <td><?php echo e($bp->post_text); ?></td>
+                            <td><?php echo e($bp->sent_at); ?></td>
                             </tr>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </tbody>
                     </table>
                     <span class="pull-right" style="margin-right: 90px;">
-                    {{ $bufferPosts->links() }}
+                    <?php echo e($bufferPosts->links()); ?>
+
                     </span>
                 <!-- </div>
             </div> -->
@@ -121,4 +121,6 @@
         
     });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
