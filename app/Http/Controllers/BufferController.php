@@ -10,41 +10,28 @@ use Illuminate\Support\Facades\DB;
 
 class BufferController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         if(!Auth::guard('web')->check()){
             return redirect('/login');
         }
-        $bufferPosts = BufferPosting::paginate(10);
+        $search = $request->input('search');
+        $date = $request->input('date');
+        $group_p = $request->input('group');
 
+        $bufferPosts = BufferPosting::latest()->search($search,$date,$group_p)->paginate(20);
+        // if($request->input()){
+            // $bufferPosts = BufferPosting::Where('post_text', 'like', '%' . $request->input('select_search') . '%')->orWhere('sent_at', 'like', '%' . $request->input('select_date') . '%')->orWhere('group_id', 'like', '%' . $request->input('select_group') . '%')
+            // ->paginate(10);
+            // dd($bufferPosts);     
+        // }
         foreach ($bufferPosts as $key => $value) {
             $groupInfo[] = BufferPosting::find($value->id)->groupInfo;
             $accountInfo[] = BufferPosting::find($value->id)->accountInfo;
         }
         $groups = SocialPostGroups::all();
-        return view('group.bufferpost', [ 'bufferPosts'=> $bufferPosts, 'groupInfo'=>$groupInfo,'accountInfo'=>$accountInfo, 'groups'=>$groups ]);
-    }
+        return view('group.bufferpost', [ 'bufferPosts'=> $bufferPosts, 'groupInfo'=>$groupInfo,'accountInfo'=>$accountInfo, 'groups'=>$groups, 'search'=>$search, 'date'=>$date, 'group_p'=>$group_p, ]);
 
-    public function getBySelect($any)
-    {
-        return "any";   
     }
-    // public function getajax(Request $request)
-    // {
-    //     if ($request->ajax()) {
-    //         $data = DB::table('buffer_postings')
-    //             ->join('social_post_groups', 'buffer_postings.group_id', '=', 'social_post_groups.id')
-    //             ->join('social_accounts', 'buffer_postings.account_id', '=', 'social_accounts.id')
-    //             ->select(
-    //                 'buffer_postings.post_text as b_text',
-    //                 'buffer_postings.sent_at as b_time',
-    //                 'social_post_groups.type as b_type', 
-    //                 'social_accounts.name as b_name', 
-    //                 'social_post_groups.name as b_name2'
-    //             )
-    //             ->get();
-
-    //             return $data;
-    //     }
-    // }
+   
 }

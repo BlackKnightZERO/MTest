@@ -15,4 +15,9 @@ class BufferPosting extends Model
         return $this->hasOne(SocialAccounts::Class, 'id', 'account_id');
     }
 
+    public function scopeSearch($query, $search, $date, $group) {
+    	return $query->where('post_text', 'like', '%' . $search . '%')
+    				->Where('sent_at', 'like', '%' . $date . '%')
+    				->Where('group_id', 'like', '%' . $group . '%');
+    }
 }

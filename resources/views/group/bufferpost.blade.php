@@ -5,11 +5,11 @@
     </h3>
 
     <style type="text/css">
-        #select_search, #select_groups{
+        #search, #group{
             border-top:none; border-left:none; border-right:none; background: #f5f8fa;
             padding-left: 25px;
         }
-        #select_search:focus {
+        #earch:focus {
             outline: none;
         }
     </style>
@@ -18,25 +18,32 @@
         <div class="col-md-12">
             <!-- <div class="card" style="width: 100%">
                 <div class="card-body"> -->
-
-                <form>    
+                    
+                <form method="GET" action="{{ route('history') }}" id="myForm">    
                     <div class="row">
                         <div class="col-md-3" style="position: relative;">
                             <span style="position: absolute; margin-left: 5px;"><i class="fa fa-search"></i></span>
-                            <input type="text" name="select_search" id="select_search">
+                            <input type="text" name="search" id="search" value="{{ isset($search) ? $search : '' }}">
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <input type="date" name="date" id="date" value="{{ isset($date) ? $search : '' }}" style="border: none;">
                         </div>
                         <div class="col-md-3">
-                            <input type="date" name="select_date" id="select_date" style="border: none;">
-                        </div>
-                        <div class="col-md-3">
-                            <select id="select_groups">
-                              <option value="volvo">All Groups</option>
-                              @foreach($groups as $group)
-                              <option value="{{ $group->id }}">{{ $group->name }}</option>
+                            <select id="group" name="group">
+                              <option value="" selected="selected">All Groups</option>
+                              @foreach($groups as $val)
+                                <option value="{{ $val->id }}" 
+                                    <?php if((int)$val->id==(int)isset($group_p)){ ?>
+                                        selected
+                                    <?php } ?>
+                                    >{{ $val->name }}</option>
                               @endforeach
                             </select>
                         </div>
+                        
                     </div>
+                    <button type="text" type="submit">search</button>
                 </form>
 
                     <br>
@@ -50,7 +57,7 @@
                                 <th>Time</th> 
                             </tr> 
                         </thead>
-                        <tbody>
+                        <tbody id="t-body">
                             @foreach($bufferPosts as $key => $bp)
                            <tr>
                             <td>{{ $groupInfo[$key]->name }}</td>
@@ -72,7 +79,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <span class="pull-right" style="margin-right: 90px;">
+                    <span id='pag-links' class="pull-right" style="margin-right: 90px;">
                     {{ $bufferPosts->links() }}
                     </span>
                 <!-- </div>
@@ -86,39 +93,123 @@
   crossorigin="anonymous"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
-    $('#select_date').change(function(){
-        var v = this.value;
-        console.log(v);
-        // var url = '?search=&date='+v+'&group=';
-        var url = 'url/'+v;
-        console.log(url);
-        $.ajax({
-                type :'GET',
-                url : url,
-                dataType :"json",
-                data :{},
-                success:function(data) 
-                 {
-                    console.log(data);
-                 },
-                  error: function()
-                 {
-                     console.log("error");
-                 }
-            });     
-
-
-    });
-
-});
-    $('#select_groups').change(function(){
-        console.log(this.value);
+    // $(document).ready(function() {
+    // $('#select_date').change(function(){
         
-    });
-    $('#select_search').keyup(function(){
-        console.log(this.value);
-        
-    });
+    // var date = this.value;
+    // var token = $('meta[name="csrf-token"]').attr('content');
+    // $.ajax({
+
+    //     type:'POST',
+    //     url:`{!! URL::to('/history/date/') !!}`,
+    //     dataType: 'JSON',
+    //     data: {
+    //         "_method": 'POST',
+    //         "_token": token,
+    //         "date": date,
+    //     },
+    //     success:function(data){
+    //         //console.log('success');
+    //         // console.log(data);
+    //         var newDataAvatar = [];
+    //         var newDataAvatarType = [];
+    //         var newDataBufferText = [];
+    //         var newDataBufferSent = [];
+    //         var newDataGroupName = [];
+    //         var newDataGroupType = [];
+           
+
+            
+    //         $.each(data['accountInfo'], function( index, value ) {
+    //             newDataAvatar.push(value['avatar']);
+    //             newDataAvatarType.push(value['type']);
+    //         });
+    //         $.each(data['bufferPosts']['data'], function( index, value ) {
+    //             newDataBufferText.push(value['post_text']);
+    //             newDataBufferSent.push(value['sent_at']);
+    //         });
+    //         $.each(data['groupInfo'], function( index, value ) {
+    //             newDataGroupName.push(value['name']);
+    //             newDataGroupType.push(value['type']);
+    //         });
+
+
+    //         var i;
+    //         var txt = '';
+    //         for (i = 0; i < newDataAvatar.length; i++) {
+    //           txt+=`
+    //                   <tr>
+    //                     <td>${newDataGroupName[i]}</td>
+    //                         <td>${newDataGroupType[i]}</td>
+    //                         <td>
+    //                             <div class="media">
+    //                                 <div class="media-right">
+    //                                     <a href="">
+    //                                         <span class="fa fa-${newDataAvatarType[i]}"></span>
+
+    //                                         <img width="50" class="media-object img-circle" src="${newDataAvatar[i]}" alt="">
+    //                                     </a>
+    //                                 </div>
+    //                             </div>
+    //                         </td> 
+    //                         <td>${newDataBufferText[i]}</td>
+    //                         <td>${newDataBufferSent[i]}</td>
+    //                 </tr>
+    //                 `
+    //         }
+    //         $("#t-body").empty();
+    //         //console.log(txt);
+    //         $("#t-body").append(txt);
+
+    //         $("#pag-links").empty();
+            
+    //     },
+    //     error:function(){
+    //         console.log('error');
+    //         $("#t-body").empty();
+    //         $("#t-body").append(`
+    //             <tr>
+    //                 <td>no data found</td>
+    //                 <td>no data found</td>
+    //                 <td>no data found</td>
+    //                 <td>no data found</td>
+    //                 <td>no data found</td>
+    //             </tr>
+    //             `);
+    //          $("#pag-links").empty();
+    //     },         
+    //     });
+    // });
+    // });
+
+    // $(document).ready(function() {
+    // $('#new').click(function(){
+    //     console.log(this.value);
+    //     // var search_group = this.value;
+    //     var search_group = "meow";
+    //     $.ajax({
+    //         type:'GET',
+    //         url:`{!! URL::to('/history') !!}`,
+    //         // url:`{!! URL::to('/history?group=') !!}${search_group}`,
+    //         dataType: 'JSON',
+    //         data: {
+    //             "group": search_group,
+    //         },
+    //         success:function(data){
+    //             console.log(data);
+
+    //         },
+    //         error:function(data){
+    //             console.log("failed");
+    //         },
+    //         });
+    //     });
+    // });
+    // $(document).ready(function() {
+    // $('#select_groups').change(function(){
+    //     console.log(this.value);
+    //     $('#myForm').submit();
+    //     });
+    // });
 </script>
 @endsection

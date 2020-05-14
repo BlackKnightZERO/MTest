@@ -1801,6 +1801,39 @@ class AjaxController extends Controller
         return $rv;
     }
 
+    public function getBySelect(Request $request){
+        if(!Auth::guard('web')->check()){
+            return redirect('/login');
+        }
+        // $date='2019-01-01';
+        $date=$request->date;
+        $fromDate = $date;
+        $toDate   = $date;
+
+        $bufferPosts = BufferPosting::whereRaw(
+          "(created_at >= ? AND created_at <= ?)", 
+          [$fromDate." 00:00:00", $toDate." 23:59:59"]
+        )->get();
+
+        // return $bufferPosts;
+
+        foreach ($bufferPosts as $key => $value) {
+            $groupInfo[] = BufferPosting::find($value->id)->groupInfo;
+            $accountInfo[] = BufferPosting::find($value->id)->accountInfo;
+        }
+        $groups = SocialPostGroups::all();
+        return ([ 'bufferPosts'=> $bufferPosts, 'groupInfo'=>$groupInfo,'accountInfo'=>$accountInfo, 'groups'=>$groups ]);
+    }
+
+    public function getBySelectGroup(Request $request)
+    {
+        if(!Auth::guard('web')->check()){
+            return redirect('/login');
+        }
+        return $request->input();
+        exit();
+    }
+
 
 
 }
